@@ -19,6 +19,7 @@ import android.content.res.XmlResourceParser;
 
 import com.example.provinceandcityforcn.model.Pic;
 import com.example.provinceandcityforcn.paser.MediaParser;
+import com.example.provinceandcityforcn.process.ProcessResult;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,11 +28,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * 本例实现Pull解析XML文件
- * @author zzp
  *
+ * @author zzp
  */
 public class MainActivity extends Activity {
 
@@ -57,13 +59,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getProvince4AssetsBtn = (Button)findViewById(R.id.getProvinceBtn1);
-        getProvince4XmlBtn = (Button)findViewById(R.id.getProvinceBtn2);
-        getProvince4UrlBtn = (Button)findViewById(R.id.getProvinceBtn3);
+        getProvince4AssetsBtn = (Button) findViewById(R.id.getProvinceBtn1);
+        getProvince4XmlBtn = (Button) findViewById(R.id.getProvinceBtn2);
+        getProvince4UrlBtn = (Button) findViewById(R.id.getProvinceBtn3);
 
-        getCityBtn = (Button)findViewById(R.id.getCityBtn);
-        clearBtn = (Button)findViewById(R.id.clearBtn);
-        showView = (TextView)findViewById(R.id.view);
+        getCityBtn = (Button) findViewById(R.id.getCityBtn);
+        clearBtn = (Button) findViewById(R.id.clearBtn);
+        showView = (TextView) findViewById(R.id.view);
 
         getProvince4AssetsBtn.setOnClickListener(mOnClickListener);
         getProvince4XmlBtn.setOnClickListener(mOnClickListener);
@@ -82,11 +84,11 @@ public class MainActivity extends Activity {
                      provinceandcityStr = getStringFromAssets(fileName);
                     /*/
                     //   xml文件来源方式一：  assets   InputStream             
-                    provinceArray = ProvincePullParse.Parse(getInputStreamFromAssets(fileName));                    
+                    provinceArray = ProvincePullParse.Parse(getInputStreamFromAssets(fileName));
                     //*/
 
-                    for(Province pro : provinceArray){
-                        provinceStr += pro.getProvinceId() + " : " +pro.getProvinceName()+"\n";
+                    for (Province pro : provinceArray) {
+                        provinceStr += pro.getProvinceId() + " : " + pro.getProvinceName() + "\n";
                     }
 
                     showView.setText(provinceStr);
@@ -96,7 +98,9 @@ public class MainActivity extends Activity {
                     provinceandcityParser = getXMLFromResXml(fileName);
 //                    ArrayList<ArrayList<Pic>> picArrarys = MediaParser.ParseXml(provinceandcityParser);
                     ArrayList<Object> arrarys = MediaParser.ParseXml(provinceandcityParser);
-                   Log.v("TAG",arrarys.toString());
+                    Log.v("TAG", arrarys.toString());
+                    HashMap<String, String[]> mURL = new ProcessResult().process(arrarys);
+                    Log.v("TAG", mURL.toString());
                     break;
 
                 case R.id.getProvinceBtn3:
@@ -111,8 +115,8 @@ public class MainActivity extends Activity {
                     provinceandcityParser = getXMLFromResXml(fileName);
 
                     cityArray = CityPullParse.ParseXml(provinceandcityParser);
-                    for(City city : cityArray){
-                        cityStr += "省份ID["+city.getProvinceId() + "],城市ID[" + city.getCityId() +"], "+city.getCityName()+"\n";
+                    for (City city : cityArray) {
+                        cityStr += "省份ID[" + city.getProvinceId() + "],城市ID[" + city.getCityId() + "], " + city.getCityName() + "\n";
                     }
                     showView.setText(cityStr);
                     break;
@@ -130,23 +134,23 @@ public class MainActivity extends Activity {
      * 直接获取Assets文件夹中的XML文件转成String，在parse时会失败，（异常信息：PI must not start with xml）
      * 后来排查发现去掉首行<?xml version="1.0" encoding="utf-8"?> ，解析成功，不推荐该方式，多一些不必要的string转换
      * 直接采用 getInputStreamFromAssets
-     * 
+     *
      * @param fileName
      * @return : 读取到Assets文件夹下的xml文件字符串
      */
-    public String getStringFromAssets(String fileName){ 
-        String line="";
-        String Result="";       
+    public String getStringFromAssets(String fileName) {
+        String line = "";
+        String Result = "";
 
         try {
-            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(fileName)); 
+            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open(fileName));
             BufferedReader bufReader = new BufferedReader(inputReader);
 
-            while((line = bufReader.readLine()) != null)
+            while ((line = bufReader.readLine()) != null)
                 Result += line;
 
             return Result;
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Result;
@@ -154,10 +158,11 @@ public class MainActivity extends Activity {
 
     /**
      * 同样删除首行，才能解析成功，
+     *
      * @param fileName
      * @return 返回xml文件的inputStream
-     */     
-    public InputStream getInputStreamFromAssets(String fileName){
+     */
+    public InputStream getInputStreamFromAssets(String fileName) {
         try {
             InputStream inputStream = getResources().getAssets().open(fileName);
             return inputStream;
@@ -169,11 +174,11 @@ public class MainActivity extends Activity {
 
     /**
      * 读取XML文件，xml文件放到res/xml文件夹中，若XML为本地文件，则推荐该方法
-     * 
+     *
      * @param fileName
      * @return : 读取到res/xml文件夹下的xml文件，返回XmlResourceParser对象（XmlPullParser的子类）
      */
-    public XmlResourceParser getXMLFromResXml(String fileName){
+    public XmlResourceParser getXMLFromResXml(String fileName) {
         XmlResourceParser xmlParser = null;
         try {
             //*/
@@ -184,14 +189,15 @@ public class MainActivity extends Activity {
             InputStream inputStream = this.getResources().openRawResource(R.xml.provinceandcity);
             /*/
             return xmlParser;
-        } catch (Exception e) { 
-            e.printStackTrace(); 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return xmlParser;
     }
 
     /**
      * 读取url的xml资源 转成String
+     *
      * @param url
      * @return 返回 读取url的xml字符串
      */
@@ -219,17 +225,18 @@ public class MainActivity extends Activity {
 
     /**
      * 解析SDcard xml文件
+     *
      * @param fileName
      * @return 返回xml文件的inputStream
-     */     
-    public InputStream getInputStreamFromSDcard(String fileName){
+     */
+    public InputStream getInputStreamFromSDcard(String fileName) {
         try {
             // 路径根据实际项目修改
             String path = Environment.getExternalStorageDirectory().toString() + "/test_xml/";
 
             Log.v("", "path : " + path);
 
-            File xmlFlie = new File(path+fileName);
+            File xmlFlie = new File(path + fileName);
 
             InputStream inputStream = new FileInputStream(xmlFlie);
 
@@ -241,15 +248,15 @@ public class MainActivity extends Activity {
     }
 
     /**
-     *  多线程加载网络端的xml，若xml文件过大也需要用该方式加载
+     * 多线程加载网络端的xml，若xml文件过大也需要用该方式加载
      */
-    Handler mHandler = new Handler();   
+    Handler mHandler = new Handler();
     Runnable mRunnable = new Runnable() {
         public void run() {
-            if(!isFinishParser){
+            if (!isFinishParser) {
 
-                mHandler.postDelayed(mRunnable, 1000);    
-            }else{
+                mHandler.postDelayed(mRunnable, 1000);
+            } else {
                 showView.setText(provinceStr);
                 mHandler.removeCallbacks(mRunnable);
             }
@@ -259,15 +266,15 @@ public class MainActivity extends Activity {
     /**
      * 比较耗时操作新建一个线程，避免UI线程ANR
      */
-    public void parserWhitThread(){
-        new Thread(){
+    public void parserWhitThread() {
+        new Thread() {
             @Override
-            public void run() {                
+            public void run() {
                 provinceandcityStr = getStringByUrl(provinceAndCityUrl);
-                Log.v("xml",provinceandcityStr);
+                Log.v("xml", provinceandcityStr);
                 provinceArray = ProvincePullParse.Parse(provinceandcityStr);
-                for(Province pro : provinceArray){
-                    provinceStr += pro.getProvinceId() + " : " +pro.getProvinceName()+"\n";
+                for (Province pro : provinceArray) {
+                    provinceStr += pro.getProvinceId() + " : " + pro.getProvinceName() + "\n";
                 }
                 isFinishParser = true;
             }
