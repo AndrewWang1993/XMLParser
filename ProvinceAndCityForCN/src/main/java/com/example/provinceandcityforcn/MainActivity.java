@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.app.Activity;
 import android.content.res.XmlResourceParser;
 
+import com.example.provinceandcityforcn.model.Pic;
+import com.example.provinceandcityforcn.paser.MediaParser;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +42,7 @@ public class MainActivity extends Activity {
     private Button clearBtn;
     private TextView showView;
 
-    private String fileName = "provinceandcity.xml";
+    private String fileName = "media.xml";
     private String provinceandcityStr = null;
     private XmlPullParser provinceandcityParser;
     public ArrayList<Province> provinceArray;
@@ -88,16 +91,12 @@ public class MainActivity extends Activity {
 
                     showView.setText(provinceStr);
                     break;
-
                 case R.id.getProvinceBtn2:
                     //  xml文件来源方式二： res/xml   XmlResourceParser
-                    provinceandcityParser = getXMLFromResXml(fileName);                    
-                    provinceArray = ProvincePullParse.ParseXml(provinceandcityParser);
-                    for(Province pro : provinceArray){
-                        provinceStr += pro.getProvinceId() + " : " +pro.getProvinceName()+"\n";
-                    }
-
-                    showView.setText(provinceStr);
+                    provinceandcityParser = getXMLFromResXml(fileName);
+//                    ArrayList<ArrayList<Pic>> picArrarys = MediaParser.ParseXml(provinceandcityParser);
+                    ArrayList<Object> arrarys = MediaParser.ParseXml(provinceandcityParser);
+                   Log.v("TAG",arrarys.toString());
                     break;
 
                 case R.id.getProvinceBtn3:
@@ -179,7 +178,7 @@ public class MainActivity extends Activity {
         try {
             //*/
             //  xmlParser = this.getResources().getAssets().openXmlResourceParser("assets/"+fileName);        // 失败,找不到文件
-            xmlParser = this.getResources().getXml(R.xml.provinceandcity);
+            xmlParser = this.getResources().getXml(R.xml.media);
             /*/
             // xml文件在res目录下 也可以用此方法返回inputStream
             InputStream inputStream = this.getResources().openRawResource(R.xml.provinceandcity);

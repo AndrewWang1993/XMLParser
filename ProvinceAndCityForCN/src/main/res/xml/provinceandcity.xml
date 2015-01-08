@@ -3,8 +3,6 @@
     <province
         id="1"
         name="直辖市">
-        <aa>aa</aa>
-        <bb>bb</bb>
         <item>
             <id>1</id>
             <name>北京</name>

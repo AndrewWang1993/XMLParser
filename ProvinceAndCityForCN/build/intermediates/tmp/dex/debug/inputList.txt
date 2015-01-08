@@ -1,2 +1,2 @@
-H:\AndroidStudio_1.0WS\ProvinceAndCityForCN\ProvinceAndCityForCN\build\intermediates\classes\debug
-H:\AndroidStudio_1.0WS\ProvinceAndCityForCN\ProvinceAndCityForCN\build\intermediates\pre-dexed\debug\android-support-v4-3ae922d725030aae9a7d863c7a927608b594cdc7.jar
+G:\AndroidStudioWS\XMLParser\ProvinceAndCityForCN\build\intermediates\classes\debug
+G:\AndroidStudioWS\XMLParser\ProvinceAndCityForCN\build\intermediates\pre-dexed\debug\android-support-v4-604bf39918ca6b276a42b2a6362573725f7ad93c.jar

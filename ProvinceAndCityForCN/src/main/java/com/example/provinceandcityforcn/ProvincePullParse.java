@@ -84,10 +84,7 @@ public class ProvincePullParse {
                             provinceTemp = new Province();
                             provinceTemp.setProvinceId(Integer.parseInt(parser.getAttributeValue(0)));
                             provinceTemp.setProvinceName(parser.getAttributeValue(1));
-
-                           Log.v("TAG",parser.toString());
-
-                            provinceArray.add(provinceTemp);                            
+                            provinceArray.add(provinceTemp);
                         }
                         break;
 
