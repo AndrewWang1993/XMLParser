@@ -1,0 +1,2 @@
+H:\AndroidStudio_1.0WS\ProvinceAndCityForCN\ProvinceAndCityForCN\build\intermediates\classes\debug
+H:\AndroidStudio_1.0WS\ProvinceAndCityForCN\ProvinceAndCityForCN\build\intermediates\pre-dexed\debug\android-support-v4-3ae922d725030aae9a7d863c7a927608b594cdc7.jar
